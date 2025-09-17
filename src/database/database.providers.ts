@@ -14,7 +14,7 @@ export const databaseProviders = [
         password: process.env.DATABASE_PASS || 'changeme',
         database: process.env.DATABASE_NAME || 'streamdb',
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-        synchronize: process.env.NODE_ENV !== 'production', // 운영 환경에서는 false
+        synchronize: true,
       });
 
       return dataSource.initialize();
