@@ -8,6 +8,7 @@ RUN corepack enable pnpm
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --prod=false
 COPY . .
+ENV NODE_ENV=production
 RUN pnpm run build
 
 # 2. 실행 단계 (최소한의 의존성만)
