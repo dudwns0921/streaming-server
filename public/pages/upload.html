@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Page</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f7f7f7;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 400px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 32px 24px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 24px;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      input[type="file"] {
+        padding: 8px 0;
+      }
+      input[type="text"] {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      button {
+        padding: 10px;
+        background: #1976d2;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      button:hover {
+        background: #1565c0;
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+      <h1>Upload Video</h1>
+      <form action="/video/upload" method="post" enctype="multipart/form-data">
+          <input type="file" name="file" accept="video/*" required>
+          <input type="text" name="title" placeholder="Video Title" required>
+          <input type="text" name="description" placeholder="Video Description" required>
+          <button type="submit">Upload Video</button>
+      </form>
+    </div>
+</body>
+</html>
