@@ -1,18 +1,26 @@
+# 1. 빌드 단계
+FROM node:22-alpine AS builder
+
+WORKDIR /app
+
+RUN corepack enable pnpm
+
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --prod=false
+COPY . .
+RUN pnpm run build
+
+# 2. 실행 단계 (최소한의 의존성만)
 FROM node:22-alpine
 
 WORKDIR /app
 
-# pnpm 설치
-RUN npm install -g pnpm
+RUN corepack enable pnpm
+RUN apk add --no-cache ffmpeg
 
 COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --prod
 
-RUN pnpm install --frozen-lockfile
+COPY --from=builder /app/dist ./dist
 
-COPY . .
-
-# 빌드 (필요하면)
-RUN pnpm run build
-
-# 빌드 결과물을 실행
-CMD ["node", "dist/main"]
+CMD ["node", "dist/main.js"]
