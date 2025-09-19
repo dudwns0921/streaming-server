@@ -19,9 +19,9 @@ import {
 } from 'fs';
 import type { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
 import { spawn, ChildProcessWithoutNullStreams } from 'child_process';
 import { VideoService } from './video.service';
+import { diskStorage } from 'multer';
 
 @Controller('video')
 export class VideoController {
