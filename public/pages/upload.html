@@ -64,10 +64,10 @@
     <script>
       const isProd = window.location.hostname.includes('elioground.com');
       const form = document.getElementById('uploadForm');
-      if(isProd) {
+      if (isProd) {
         form.action = 'https://elioground.com/streaming-server/video/upload';
       } else {
-        const isTestProd = window.location.hostname.includes('streaming-server');
+        const isTestProd = window.location.href.includes('streaming-server');
         form.action = isTestProd ? 'https://localhost/streaming-server/video/upload' : '/video/upload/';
       }
     </script>

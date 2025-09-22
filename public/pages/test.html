@@ -58,29 +58,51 @@
     <div class="container">
       <h2>Video Stream Test</h2>
       <div class="input-group">
-        <input type="number" id="videoIdInput" placeholder="Video ID" min="1">
-        <button onclick="loadVideo()">Load Video</button>
+        <select id="videoIdSelect">
+          <option value="">Select Video</option>
+        </select>
+        <button id="loadVideoButton" onclick="loadVideo()">Load Video</button>
       </div>
       <video id="videoPlayer" controls muted autoplay width="400" height="225"></video>
     </div>
     <script>
+      let basePath = '';
+      const isProd = window.location.hostname.includes('elioground.com');
+      if (isProd) {
+        basePath = `${window.location.origin}/streaming-server`;
+      } else {
+        const isTestProd = window.location.href.includes('streaming-server');
+        basePath = isTestProd ? `${window.location.origin}/streaming-server` : window.location.origin;
+      }
+
+      async function initialize() {
+        console.log('Base path set to:', basePath);
+        const videos = await fetch(`${basePath}/video`).then(res => res.json());
+        const select = document.getElementById('videoIdSelect');
+        if (videos.success && Array.isArray(videos.data)) {
+          videos.data.forEach(video => {
+            const option = document.createElement('option');
+            option.value = video.id;
+            option.textContent = `ID: ${video.id} - ${video.title || 'Untitled'}`;
+            select.appendChild(option);
+          });
+        }
+      }
+
       function loadVideo() {
-        const videoId = document.getElementById('videoIdInput').value;
+        const loadVideoButton = document.getElementById('loadVideoButton');
+        loadVideoButton.disabled = true;
+        loadVideoButton.textContent = 'Loading...';
+
+        const videoId = document.getElementById('videoIdSelect').value;
         if (!videoId) {
-          alert('Video ID를 입력하세요.');
+          alert('Video를 선택하세요.');
+          loadVideoButton.disabled = false;
+          loadVideoButton.textContent = 'Load Video';
           return;
         }
-        const isProd = window.location.hostname.includes('elioground.com');
 
-        let hlsSrc = "";
-
-        if (isProd) {
-          hlsSrc = `${window.location.origin}/streaming-server/video/streaming/${videoId}`;
-        } else {
-          const isTestProd = window.location.hostname.includes('streaming-server');
-          hlsSrc = isTestProd ? `${window.location.origin}/streaming-server/video/streaming/${videoId}` : `${window.location.origin}/video/streaming/${videoId}`;
-        
-        }
+        let hlsSrc = `${basePath}/video/streaming/${videoId}`;
         const video = document.getElementById('videoPlayer');
         if (Hls.isSupported()) {
           const hls = new Hls();
@@ -89,7 +111,14 @@
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
           video.src = hlsSrc;
         }
+
+        video.addEventListener('loadeddata', () => {
+          loadVideoButton.disabled = false;
+          loadVideoButton.textContent = 'Load Video';
+        });
       }
+
+      initialize();
     </script>
   </body>
 </html>
