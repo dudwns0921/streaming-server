@@ -71,7 +71,7 @@
       if (isProd) {
         basePath = `${window.location.origin}/streaming-server`;
       } else {
-        const isTestProd = window.location.hostname.includes('streaming-server');
+        const isTestProd = window.location.href.includes('streaming-server');
         basePath = isTestProd ? `${window.location.origin}/streaming-server` : window.location.origin;
       }
 
