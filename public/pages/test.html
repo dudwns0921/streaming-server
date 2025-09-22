@@ -70,7 +70,17 @@
           alert('Video ID를 입력하세요.');
           return;
         }
-        const hlsSrc = `${window.location.origin}/video/streaming/${videoId}`;
+        const isProd = window.location.hostname.includes('elioground.com');
+
+        let hlsSrc = "";
+
+        if (isProd) {
+          hlsSrc = `${window.location.origin}/streaming-server/video/streaming/${videoId}`;
+        } else {
+          const isTestProd = window.location.hostname.includes('streaming-server');
+          hlsSrc = isTestProd ? `${window.location.origin}/streaming-server/video/streaming/${videoId}` : `${window.location.origin}/video/streaming/${videoId}`;
+        
+        }
         const video = document.getElementById('videoPlayer');
         if (Hls.isSupported()) {
           const hls = new Hls();
