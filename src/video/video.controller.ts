@@ -22,6 +22,18 @@ export class VideoController {
     @Inject(VideoService)
     private readonly videoService: VideoService,
   ) {}
+  @Get('/')
+  async getAllVideos(@Res() res: Response) {
+    try {
+      const videos = await this.videoService.getAllVideos();
+      return res.status(200).json({ success: true, data: videos });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ success: false, message: (error as Error).message });
+    }
+  }
+
   @Get('/streaming/:target')
   async getStreamOrFile(@Param('target') target: string, @Res() res: Response) {
     let filePath: string;

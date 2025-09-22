@@ -13,6 +13,10 @@ export class VideoService {
     private readonly videoRepository: Repository<Video>,
   ) {}
 
+  async getAllVideos(): Promise<Video[]> {
+    return await this.videoRepository.find();
+  }
+
   async handleUpload(
     file: Express.Multer.File,
     title: string,
