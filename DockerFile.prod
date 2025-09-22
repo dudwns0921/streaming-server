@@ -6,9 +6,8 @@ WORKDIR /app
 RUN corepack enable pnpm
 
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --prod=false
+RUN pnpm install --frozen-lockfile
 COPY . .
-ENV NODE_ENV=production
 RUN pnpm run build
 
 # 2. 실행 단계 (최소한의 의존성만)
@@ -20,7 +19,7 @@ RUN corepack enable pnpm
 RUN apk add --no-cache ffmpeg
 
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --prod
+RUN pnpm install --frozen-lockfile
 
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/public ./public
