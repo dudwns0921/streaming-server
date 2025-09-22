@@ -7,17 +7,8 @@ async function bootstrap() {
 
   app.enableCors();
 
-  const basePath =
-    process.env.NODE_ENV === 'production' ? '/streaming-server' : '';
-
-  app.use(
-    `${basePath}/upload`,
-    express.static('public/pages', { index: 'upload.html' }),
-  );
-  app.use(
-    `${basePath}/test`,
-    express.static('public/pages', { index: 'test.html' }),
-  );
+  app.use('/upload', express.static('public/pages', { index: 'upload.html' }));
+  app.use('/test', express.static('public/pages', { index: 'test.html' }));
 
   await app.listen(process.env.PORT ?? 3000);
 }
